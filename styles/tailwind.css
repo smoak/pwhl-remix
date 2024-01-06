@@ -4,6 +4,6 @@
 
 @layer components {
   .bg-layout {
-    @apply flex min-h-screen bg-nhl-gray-50 flex-col text-nhl-black before:absolute before:h-full before:w-full before:opacity-50 before:bg-center before:bg-no-repeat before:blur-[105px] before:content-[''];
+    @apply flex min-h-screen flex-col text-black before:absolute before:h-full before:w-full before:opacity-50 before:bg-center before:bg-no-repeat before:blur-[105px] before:content-[''];
   }
 }

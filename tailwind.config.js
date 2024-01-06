@@ -3,6 +3,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        "pwhl-purple": {
+          50: "#33058d",
+        },
         blue: {
           1000: "#5963b3",
         },

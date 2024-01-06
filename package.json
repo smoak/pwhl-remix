@@ -11,6 +11,7 @@
     "dev:css": "run-s -n 'generate:css -- --watch'",
     "dev:remix": "remix dev --manual",
     "generate:css": "tailwindcss -i ./styles/tailwind.css -o ./app/tailwind.css",
+    "generate:icons": "npx @svgr/cli --out-dir app/components/icons -- app/icons",
     "lint": "run-s 'lint:*'",
     "lint:es": "eslint app --max-warnings=0",
     "lint:style": "prettier 'app/**/*.(ts|tsx)' --check",
@@ -38,6 +39,10 @@
   "devDependencies": {
     "@remix-run/dev": "^2.4.1",
     "@remix-run/eslint-config": "^2.0.0",
+    "@svgr/cli": "^8.1.0",
+    "@svgr/plugin-jsx": "^8.1.0",
+    "@svgr/plugin-prettier": "^8.1.0",
+    "@svgr/plugin-svgo": "^8.1.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@typescript-eslint/parser": "^5.15.0",
