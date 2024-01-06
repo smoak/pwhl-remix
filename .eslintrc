@@ -1,0 +1,24 @@
+{
+  "ignorePatterns": ["node_modules/", "dist/", "build/"],
+  "extends": ["@remix-run/eslint-config", "@remix-run/eslint-config/node", "plugin:prettier/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 13,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "rules": {
+    "prettier/prettier": "error"
+  },
+  "overrides": [
+    {
+      "files": ["app/*", "app/routes/**/*.tsx", "app/**/stories.tsx"],
+      "rules": {
+        "import/no-default-export": "off"
+      }
+    }
+  ]
+}
