@@ -1,11 +1,16 @@
 import { GameCard } from "~/components/GameCard";
 import type { Game } from "../types";
+import { useHydration } from "~/hooks/useHydration";
+import { isSameDay } from "date-fns";
+import { Suspense } from "react";
+import { Skeleton } from "./Skeleton";
 
 export type GamesListProps = {
   readonly games: Game[];
+  readonly filter: Date;
 };
 
-export const GamesList = ({ games }: GamesListProps) => {
+const FilteredGamesList = ({ games }: Omit<GamesListProps, "filter">) => {
   if (games.length === 0) {
     return (
       <div className="grid grid-cols-auto-fill gap-5">
@@ -22,5 +27,23 @@ export const GamesList = ({ games }: GamesListProps) => {
         return <GameCard key={game.id} game={game} />;
       })}
     </div>
+  );
+};
+
+export const GamesList = ({ games, filter }: GamesListProps) => {
+  const hydrated = useHydration();
+
+  if (!hydrated) {
+    return <Skeleton />;
+  }
+
+  const filteredGames = games.filter((g) =>
+    isSameDay(filter, new Date(g.gameDate))
+  );
+
+  return (
+    <Suspense key={hydrated ? "local" : "utc"} fallback={<Skeleton />}>
+      <FilteredGamesList games={filteredGames} />
+    </Suspense>
   );
 };

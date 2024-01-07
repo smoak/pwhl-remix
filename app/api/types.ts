@@ -5,6 +5,8 @@ export type ScheduledGame = {
   readonly SeasonID: string;
   readonly Date: string;
   readonly GameDateISO8601: string;
+  readonly ScheduledTime: string;
+  readonly ScheduledFormattedTime: string;
   readonly Timezone: string;
   readonly HomeID: string;
   readonly HomeCode: string;

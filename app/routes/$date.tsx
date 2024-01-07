@@ -1,32 +1,35 @@
 import type { LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { json, useLoaderData, useParams } from "@remix-run/react";
 import { getGamesByDate } from "~/api";
 import { DateSelector } from "~/components/DateSelector";
 import { GamesList } from "~/components/GamesList";
 import { Layout } from "~/components/Layout";
 import type { Game } from "~/components/types";
 import { normalizeGames } from "~/data/normalization/games";
-import { getToday } from "~/date-fns";
 import { useDays } from "~/hooks/useDays";
 
-export const loader: LoaderFunction = async () => {
-  const today = getToday();
-  const scheduledGames = await getGamesByDate(today);
+export const loader: LoaderFunction = async ({ params }) => {
+  const { date } = params;
+
+  if (date == null) {
+    throw new Response(null, { status: 404, statusText: "Not Found" });
+  }
+  const scheduledGames = await getGamesByDate(new Date(date));
 
   const normalizedGames = normalizeGames(scheduledGames);
 
   return json(normalizedGames);
 };
 
-const Index = () => {
+export const Index = () => {
+  const { date } = useParams();
+  const { prevDay, day, nextDay } = useDays(date);
   const games = useLoaderData<Game[]>();
-  const { day, nextDay, prevDay } = useDays();
 
   return (
     <Layout>
       <h1 className="mb-3 text-4xl font-bold">Games</h1>
-      <DateSelector day={day} nextDay={nextDay} prevDay={prevDay} />
+      <DateSelector day={day} prevDay={prevDay} nextDay={nextDay} />
       <GamesList games={games} filter={day} />
     </Layout>
   );

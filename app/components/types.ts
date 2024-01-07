@@ -7,6 +7,7 @@ type BaseGame = {
   readonly homeTeam: Team;
   readonly visitingTeam: Team;
   readonly gameState: GameState;
+  readonly gameDate: string;
 };
 
 export type LiveGame =

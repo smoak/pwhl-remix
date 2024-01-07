@@ -23,6 +23,7 @@ const normalizeGame = (apiGame: ScheduledGame): Game => {
       name: apiGame.VisitorNickname,
       logoUrl: apiGame.VisitorLogo,
     },
+    gameDate: apiGame.GameDateISO8601,
   };
 
   if (["3", "4"].includes(apiGame.GameStatus)) {

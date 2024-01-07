@@ -1,12 +1,7 @@
 import { fetch } from "cross-fetch";
 import { getToday } from "~/date-fns";
 import type { ModulekitResponse, ScheduledGame } from "./types";
-import {
-  differenceInCalendarDays,
-  isBefore,
-  isSameDay,
-  isToday,
-} from "date-fns";
+import { differenceInCalendarDays, isBefore, isToday } from "date-fns";
 
 export const BASE_URL = "https://lscluster.hockeytech.com/feed/index.php";
 const CLIENT_CODE = "pwhl";
@@ -52,10 +47,6 @@ export const getGamesByDate: GetGamesByDate = async (date) => {
   const response = await fetch(url.toString());
   const { SiteKit } = (await response.json()) as ModulekitResponse;
   const games = SiteKit.Scorebar;
-
-  if (date) {
-    return games.filter((g) => isSameDay(date, new Date(g.GameDateISO8601)));
-  }
 
   return games;
 };
