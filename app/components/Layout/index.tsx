@@ -7,7 +7,7 @@ export type LayoutProps = {
 
 export const Layout = ({ children }: LayoutProps) => (
   <div className="bg-layout">
-    <div className="z-[1] flex flex-grow flex-col">
+    <div className="z-[1] mx-1 flex flex-grow flex-col">
       <Header />
       <main className="container mx-auto flex-grow px-4">{children}</main>
       <Footer />
