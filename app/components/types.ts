@@ -10,9 +10,18 @@ type BaseGame = {
   readonly gameDate: string;
 };
 
+export type GameClock = {
+  readonly period: number;
+  readonly isInIntermission: boolean;
+  readonly clockTime: string;
+};
+
 export type LiveGame =
   | BaseGame & {
       readonly gameState: "Live";
+      readonly homeScore: number;
+      readonly visitingScore: number;
+      readonly gameClock: GameClock;
     };
 
 export type FinalGame =

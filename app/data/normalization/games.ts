@@ -40,6 +40,14 @@ const normalizeGame = (apiGame: ScheduledGame): Game => {
   if (["2", "10"].includes(apiGame.GameStatus)) {
     const liveGame: LiveGame = {
       ...baseGame,
+      homeScore: parseInt(apiGame.HomeGoals),
+      visitingScore: parseInt(apiGame.VisitorGoals),
+      gameClock: {
+        clockTime: apiGame.GameClock,
+        period: parseInt(apiGame.Period),
+        isInIntermission:
+          apiGame.Intermission === "1" || apiGame.GameClock === "00:00",
+      },
       gameState: "Live",
     };
     return liveGame;

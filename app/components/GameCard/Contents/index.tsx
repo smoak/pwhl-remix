@@ -1,7 +1,8 @@
 import { TeamInfo } from "~/components/TeamInfo";
-import { type Game, isFinalGame } from "~/components/types";
+import { type Game, isFinalGame, isLiveGame } from "~/components/types";
 import { FinalGameContents } from "./FinalGameContents";
 import { StartTime } from "../StartTime";
+import { LiveGameContents } from "./LiveGameContents";
 
 type ContentsProps = {
   readonly game: Game;
@@ -10,6 +11,10 @@ type ContentsProps = {
 export const Contents = ({ game }: ContentsProps) => {
   if (isFinalGame(game)) {
     return <FinalGameContents game={game} />;
+  }
+
+  if (isLiveGame(game)) {
+    return <LiveGameContents game={game} />;
   }
 
   return (
