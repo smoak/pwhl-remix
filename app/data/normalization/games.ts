@@ -1,7 +1,7 @@
 import type { GameStatus, ScheduledGame } from "~/api/types";
 import type { FinalGame, Game, GameState, LiveGame } from "~/components/types";
 
-const ApiGameStatusToGameState: Record<GameStatus, GameState> = {
+export const ApiGameStatusToGameState: Record<GameStatus, GameState> = {
   "1": "Scheduled",
   "2": "Live",
   "3": "Final",

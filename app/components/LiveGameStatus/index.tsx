@@ -1,4 +1,5 @@
 import type { GameClock } from "../types";
+import { useClockTime } from "./useClockTime";
 
 const LiveIndicator = () => (
   <span className="mx-auto block pt-2 text-xs tracking-widest">
@@ -22,15 +23,20 @@ const formatOrdinals = (n: number) => {
 };
 
 type LiveGameStatusProps = {
+  readonly gameId: number;
   readonly gameClock: GameClock;
   readonly isPlayoffGame: boolean;
 };
 
 export const LiveGameStatus = ({
+  gameId,
   gameClock,
   isPlayoffGame,
 }: LiveGameStatusProps) => {
-  const { clockTime, isInIntermission, period } = gameClock;
+  const liveClock = useClockTime(gameId);
+  const { isInIntermission } = gameClock;
+  const period = liveClock?.period ?? gameClock.period;
+  const clockTime = liveClock?.time ?? gameClock.clockTime;
 
   if (isInIntermission) {
     return (
