@@ -1,6 +1,10 @@
 import { fetch } from "cross-fetch";
 import { getToday } from "~/date-fns";
-import type { ModulekitResponse, ScheduledGame } from "./types";
+import type {
+  GameSummaryResponse,
+  ModulekitResponse,
+  ScheduledGame,
+} from "./types";
 import { differenceInCalendarDays, isBefore, isToday } from "date-fns";
 
 export const BASE_URL = "https://lscluster.hockeytech.com/feed/index.php";
@@ -49,4 +53,24 @@ export const getGamesByDate: GetGamesByDate = async (date) => {
   const games = SiteKit.Scorebar;
 
   return games;
+};
+
+type GetGameSummary = (gameId: string) => Promise<GameSummaryResponse>;
+export const getGameSummary: GetGameSummary = async (gameId) => {
+  const url = new URL(BASE_URL);
+  url.searchParams.append("feed", "statviewfeed");
+  url.searchParams.append("view", "gameSummary");
+  url.searchParams.append("game_id", gameId);
+  url.searchParams.append("key", CLIENT_KEY);
+  url.searchParams.append("client_code", CLIENT_CODE);
+  url.searchParams.append("fmt", "json");
+  console.log("hitting url", url.toString());
+
+  const response = await fetch(url.toString());
+  const responseText = await response.text();
+  const gameSummaryResponse = JSON.parse(
+    responseText.substring(1, responseText.length - 1)
+  ) as GameSummaryResponse;
+
+  return gameSummaryResponse;
 };

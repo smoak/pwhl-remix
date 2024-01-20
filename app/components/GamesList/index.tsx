@@ -4,6 +4,7 @@ import { useHydration } from "~/hooks/useHydration";
 import { isSameDay } from "date-fns";
 import { Suspense } from "react";
 import { Skeleton } from "./Skeleton";
+import { Link } from "@remix-run/react";
 
 export type GamesListProps = {
   readonly games: Game[];
@@ -24,7 +25,11 @@ const FilteredGamesList = ({ games }: Omit<GamesListProps, "filter">) => {
   return (
     <div className="grid grid-cols-auto-fill gap-5">
       {games.map((game) => {
-        return <GameCard key={game.id} game={game} />;
+        return (
+          <Link prefetch="intent" to={`/game/${game.id}`} key={game.id}>
+            <GameCard game={game} />
+          </Link>
+        );
       })}
     </div>
   );

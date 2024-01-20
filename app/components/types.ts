@@ -45,6 +45,59 @@ export type Team = {
   readonly logoUrl: string;
 };
 
+export type TeamStats = {
+  readonly score: number;
+  readonly sog: number;
+};
+
+export type GamePeriod = {
+  readonly ordinalNum: string;
+  readonly num: number;
+  readonly visitorGoals: number;
+  readonly visitorShotsOnGoal: number;
+  readonly homeGoals: number;
+  readonly homeShotsOnGoal: number;
+};
+
+export type GoalScorer = {
+  readonly id: number;
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly headshotUrl: string;
+  readonly seasonGoals: number;
+};
+
+export type ScoringPlayAssister = {
+  readonly id: number;
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly seasonAssists: number;
+};
+
+export type GoalType = "Even" | "ShortHanded" | "PowerPlay" | "EmptyNet";
+
+export type ScoringPlay = {
+  readonly period: number;
+  readonly timeInPeriod: string;
+  readonly goalScorer: GoalScorer;
+  readonly scoringTeam: {
+    readonly id: number;
+    readonly logoUrl: string;
+    readonly name: string;
+  };
+  readonly goalType: GoalType;
+  readonly primaryAssist?: ScoringPlayAssister;
+  readonly secondaryAssist?: ScoringPlayAssister;
+};
+export type ScoringPlays = Record<number, ScoringPlay[]>;
+
+export type GameStats = {
+  readonly homeTeam: TeamStats;
+  readonly visitingTeam: TeamStats;
+  readonly periods: GamePeriod[];
+  readonly scoringPlays: ScoringPlays;
+};
+
 export const isLiveGame = (g: Game): g is LiveGame => {
   return g.gameState === "Live";
 };
@@ -55,4 +108,9 @@ export const isFinalGame = (g: Game): g is FinalGame => {
 
 export const isScheduledGame = (g: Game): g is ScheduledGame => {
   return g.gameState === "Scheduled";
+};
+
+export type GameDetails = {
+  readonly game: Game;
+  readonly gameStats: GameStats;
 };
