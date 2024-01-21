@@ -38,7 +38,7 @@ export const LiveGameStatus = ({
   const period = liveClock?.period ?? gameClock.period;
   const clockTime = liveClock?.time ?? gameClock.clockTime;
 
-  if (isInIntermission) {
+  if (liveClock?.isIntermission || isInIntermission) {
     return (
       <>
         {formatOrdinals(period)} - END

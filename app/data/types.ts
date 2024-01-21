@@ -9,6 +9,20 @@ export type FirebaseRunningClockSnapshot = {
   readonly status_id: number;
 };
 
+export type FirebasePublishedClockSnapshot = {
+  readonly ClockMinutes: number;
+  readonly ClockSeconds: number;
+  readonly DatePlayed: string;
+  readonly Final: boolean;
+  readonly PeriodId: number;
+  readonly PeriodLongName: string;
+  readonly PeriodShortName: string;
+  readonly ProgressString: string;
+  readonly Started: boolean;
+  readonly StatusId: number;
+  readonly StatusName: string;
+};
+
 export type PeriodInfo = {
   readonly LongName: string;
   readonly PeriodId: number;
