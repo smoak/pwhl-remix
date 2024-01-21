@@ -1,5 +1,7 @@
 export type GameState = "Live" | "Scheduled" | "Final";
 
+export type EndState = "Regulation" | "OT" | "SO";
+
 export type Game = LiveGame | ScheduledGame | FinalGame;
 
 type BaseGame = {
@@ -29,6 +31,7 @@ export type FinalGame =
       readonly gameState: "Final";
       readonly homeScore: number;
       readonly visitingScore: number;
+      readonly endState: EndState;
     };
 
 export type ScheduledGame =

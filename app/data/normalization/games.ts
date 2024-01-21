@@ -1,5 +1,11 @@
 import type { GameStatus, ScheduledGame } from "~/api/types";
-import type { FinalGame, Game, GameState, LiveGame } from "~/components/types";
+import type {
+  EndState,
+  FinalGame,
+  Game,
+  GameState,
+  LiveGame,
+} from "~/components/types";
 
 const ApiGameStatusToGameState: Record<GameStatus, GameState> = {
   "1": "Scheduled",
@@ -7,6 +13,18 @@ const ApiGameStatusToGameState: Record<GameStatus, GameState> = {
   "3": "Final",
   "4": "Final",
   "10": "Live",
+};
+
+const normalizeEndState = (gameStatusStringLong: string): EndState => {
+  if (gameStatusStringLong === "Final SO") {
+    return "SO";
+  }
+
+  if (gameStatusStringLong === "Final") {
+    return "Regulation";
+  }
+
+  return "OT";
 };
 
 const normalizeGame = (apiGame: ScheduledGame): Game => {
@@ -32,6 +50,7 @@ const normalizeGame = (apiGame: ScheduledGame): Game => {
       homeScore: parseInt(apiGame.HomeGoals),
       visitingScore: parseInt(apiGame.VisitorGoals),
       gameState: "Final",
+      endState: normalizeEndState(apiGame.GameStatusStringLong),
     };
 
     return finalGame;
