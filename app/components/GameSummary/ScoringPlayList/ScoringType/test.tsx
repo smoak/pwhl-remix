@@ -6,7 +6,7 @@ describe("ScoringType", () => {
     let container: HTMLElement;
 
     beforeEach(() => {
-      container = render(<ScoringType goalType="ev" />).container;
+      container = render(<ScoringType goalType="Even" />).container;
     });
 
     it("should render empty", () => {
@@ -16,7 +16,7 @@ describe("ScoringType", () => {
 
   describe("when rendered with a short handed goal", () => {
     beforeEach(() => {
-      render(<ScoringType goalType="sh" />);
+      render(<ScoringType goalType="ShortHanded" />);
     });
 
     it("should render `SHG`", () => {
@@ -26,7 +26,7 @@ describe("ScoringType", () => {
 
   describe("when rendered with a power play goal", () => {
     beforeEach(() => {
-      render(<ScoringType goalType="pp" />);
+      render(<ScoringType goalType="PowerPlay" />);
     });
 
     it("should render `PP`", () => {
@@ -36,7 +36,7 @@ describe("ScoringType", () => {
 
   describe("when rendered with a empty net goal", () => {
     beforeEach(() => {
-      render(<ScoringType goalType="en" />);
+      render(<ScoringType goalType="EmptyNet" />);
     });
 
     it("should render `EN`", () => {
