@@ -217,7 +217,10 @@ type NormalizeGameDetails = (
   apiGameSummary: GameSummaryResponse
 ) => GameDetails;
 export const normalizeGameDetails: NormalizeGameDetails = (apiGameSummary) => {
-  if (apiGameSummary.details.final === "1") {
+  if (
+    apiGameSummary.details.final === "1" ||
+    apiGameSummary.details.status === "Unofficial Final"
+  ) {
     return {
       game: normalizeFinalGame(apiGameSummary),
       gameStats: normalizeGameStats(apiGameSummary),
