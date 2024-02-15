@@ -6,7 +6,6 @@ import type {
   GameSummaryTeam,
 } from "~/api/types";
 import type {
-  EndState,
   FinalGame,
   GameDetails,
   GamePeriod,
@@ -19,18 +18,7 @@ import type {
   ScoringPlays,
   TeamStats,
 } from "~/components/types";
-
-const normalizeEndState = (status: string): EndState => {
-  if (status === "Final SO") {
-    return "SO";
-  }
-
-  if (status === "Final") {
-    return "Regulation";
-  }
-
-  return "OT";
-};
+import { normalizeEndState } from "./endState";
 
 const normalizeFinalGame = ({
   details,
