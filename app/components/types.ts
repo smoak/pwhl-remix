@@ -114,3 +114,18 @@ export type GameDetails = {
   readonly game: Game;
   readonly gameStats: GameStats;
 };
+
+export type StandingsRecord = {
+  readonly teamAbbrev: string;
+  readonly teamName: string;
+  readonly teamLogoUrl: string;
+  readonly gamesPlayed: number;
+  readonly wins: number;
+  readonly regulationWins: number;
+  readonly losses: number;
+  readonly otLosses: number;
+  readonly points: number;
+  readonly pointsPercentage: number;
+};
+
+export type Standings = StandingsRecord[];

@@ -147,3 +147,42 @@ export type GameSummaryResponse = {
   readonly visitingTeam: GameSummaryTeam;
   readonly periods: GameSummaryPeriod[];
 };
+
+export type StandingsResponseSectionData = {
+  readonly prop: {
+    readonly team_code: {
+      readonly teamLink: string;
+    };
+    readonly name: {
+      readonly teamLink: string;
+    };
+  };
+  readonly row: {
+    readonly team_code: string;
+    readonly losses: string;
+    readonly regulation_wins: string;
+    readonly points: string;
+    readonly goals_for: string;
+    readonly goals_against: string;
+    readonly non_reg_wins: string;
+    readonly non_reg_losses: string;
+    readonly games_remaining: string;
+    readonly percentage: string;
+    readonly overall_rank: string;
+    readonly games_played: string;
+    readonly rank: number;
+    readonly name: string;
+  };
+};
+
+export type StandingsResponseSection = {
+  readonly title: string;
+  readonly headers: object;
+  readonly data: StandingsResponseSectionData[];
+};
+
+export type StandingsResponseObject = {
+  readonly sections: StandingsResponseSection[];
+};
+
+export type StandingsResponse = StandingsResponseObject[];

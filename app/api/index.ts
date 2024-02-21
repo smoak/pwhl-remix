@@ -4,6 +4,7 @@ import type {
   GameSummaryResponse,
   ModulekitResponse,
   ScheduledGame,
+  StandingsResponse,
 } from "./types";
 import { differenceInCalendarDays, isBefore, isToday } from "date-fns";
 
@@ -73,4 +74,28 @@ export const getGameSummary: GetGameSummary = async (gameId) => {
   ) as GameSummaryResponse;
 
   return gameSummaryResponse;
+};
+
+type GetStandings = () => Promise<StandingsResponse>;
+export const getStandings: GetStandings = async () => {
+  const url = new URL(BASE_URL);
+  url.searchParams.append("feed", "statviewfeed");
+  url.searchParams.append("view", "teams");
+  url.searchParams.append("groupTeamsBy", "division");
+  url.searchParams.append("context", "overall");
+  url.searchParams.append("site_id", "2");
+  url.searchParams.append("season", "1");
+  url.searchParams.append("special", "false");
+  url.searchParams.append("key", CLIENT_KEY);
+  url.searchParams.append("client_code", CLIENT_CODE);
+  console.log("hitting url", url.toString());
+
+  const response = await fetch(url.toString());
+
+  const responseText = await response.text();
+  const standingsResponse = JSON.parse(
+    responseText.substring(1, responseText.length - 1)
+  ) as StandingsResponse;
+
+  return standingsResponse;
 };
