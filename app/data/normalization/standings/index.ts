@@ -14,13 +14,13 @@ const normalizeStandingsRecord = ({
     gamesPlayed: parseInt(row.games_played),
     losses: parseInt(row.losses),
     otLosses: parseInt(row.non_reg_losses),
+    otWins: parseInt(row.non_reg_wins),
     points: parseInt(row.points),
     pointsPercentage: parseInt(row.percentage),
     regulationWins: parseInt(row.regulation_wins),
     teamAbbrev: row.team_code,
     teamLogoUrl: `https://assets.leaguestat.com/pwhl/logos/50x50/${teamId}.png`,
     teamName: row.name,
-    wins: parseInt(row.regulation_wins) + parseInt(row.non_reg_wins),
   };
 };
 

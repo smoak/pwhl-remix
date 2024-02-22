@@ -32,7 +32,8 @@ export const LeagueStandings = () => {
             <div className="table-cell align-middle font-bold">GP</div>
             <div className="table-cell align-middle font-bold">W</div>
             <div className="table-cell align-middle font-bold">L</div>
-            <div className="table-cell align-middle font-bold">OT</div>
+            <div className="table-cell align-middle font-bold">OTW</div>
+            <div className="table-cell align-middle font-bold">OTL</div>
             <div className="table-cell align-middle font-bold">PTS</div>
           </div>
         </header>
@@ -52,8 +53,9 @@ export const LeagueStandings = () => {
                 </div>
               </Cell>
               <Cell>{s.gamesPlayed}</Cell>
-              <Cell>{s.wins}</Cell>
+              <Cell>{s.regulationWins}</Cell>
               <Cell>{s.losses}</Cell>
+              <Cell>{s.otWins}</Cell>
               <Cell>{s.otLosses}</Cell>
               <Cell>{s.points}</Cell>
             </div>

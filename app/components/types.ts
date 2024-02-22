@@ -120,9 +120,9 @@ export type StandingsRecord = {
   readonly teamName: string;
   readonly teamLogoUrl: string;
   readonly gamesPlayed: number;
-  readonly wins: number;
   readonly regulationWins: number;
   readonly losses: number;
+  readonly otWins: number;
   readonly otLosses: number;
   readonly points: number;
   readonly pointsPercentage: number;
