@@ -7,6 +7,7 @@
 import { RemixBrowser } from "@remix-run/react";
 import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
+import { registerServiceWorker } from "./data/worker";
 
 startTransition(() => {
   hydrateRoot(
@@ -16,3 +17,5 @@ startTransition(() => {
     </StrictMode>
   );
 });
+
+registerServiceWorker();
