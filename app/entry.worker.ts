@@ -28,9 +28,3 @@ self.addEventListener("message", (event) => {
 self.addEventListener("fetch", (event) => {
   return event.respondWith(handleRequest(event));
 });
-
-// The default fetch event handler will be invoke if the
-// route is not matched by any of the worker action/loader.
-export const defaultFetchHandler = () => {
-  console.log("default fetch handler running");
-};

@@ -10,15 +10,18 @@ type RemixNavigationEventData = {
   readonly matches: UIMatch[];
 };
 
+const isRemixNavigationEventData = (data: {
+  readonly type: string;
+}): data is RemixNavigationEventData => data.type === "REMIX_NAVIGATION";
+
 export const handleMessage = async (
   event: ExtendableMessageEvent
 ): Promise<void> => {
   const cachePromises: Map<string, Promise<void>> = new Map();
   const { data } = event;
 
-  if (data.type === "REMIX_NAVIGATION") {
-    const { isMount, location, matches, manifest } =
-      data as RemixNavigationEventData;
+  if (isRemixNavigationEventData(data)) {
+    const { isMount, location, matches, manifest } = data;
     const documentUrl = location.pathname + location.search + location.hash;
 
     const [dataCache, documentCache, existingDocument] = await Promise.all([
@@ -42,8 +45,9 @@ export const handleMessage = async (
         .forEach((m) => {
           const params = new URLSearchParams(location.search);
           params.set("_data", m.id);
-          const search = params.size > 0 ? `${params.toString()}` : "";
-          const url = location.pathname + search + location.hash;
+          const url = `${location.pathname}?${params.toString()}${
+            location.hash
+          }`;
           if (!cachePromises.has(url)) {
             cachePromises.set(
               url,
