@@ -7,28 +7,17 @@ export const loader: LoaderFunction = () => {
       short_name: "PWHL",
       name: "PWHL Remix",
       start_url: "/",
+      scope: "/",
       display: "standalone",
+      orientation: "any",
       background_color: "#fff",
       description: "A simple readable PWHL app.",
       theme_color: "#33058d",
-      shortcuts: [
-        {
-          name: "Home",
-          url: "/",
-          icons: [
-            {
-              src: "/icons/icon-96x96.png",
-              sizes: "96x96",
-              type: "image/png",
-              purpose: "any monochrome",
-            },
-          ],
-        },
-      ],
       icons: [
         {
           src: "/icons/logo.svg",
-          sizes: "32x32 48x48 96x96 120x120 144x144 512x512",
+          sizes:
+            "32x32 48x48 72x72 96x96 120x120 144x144 180x180 192x192 384x384 512x512",
           type: "image/svg+xml",
           purpose: "any",
         },
