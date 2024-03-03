@@ -17,6 +17,26 @@ export const meta: MetaFunction = () => {
     {
       title: "PWHL Remix",
     },
+    {
+      name: "description",
+      content: "A simple site to show PWHL scores, schedules and game details.",
+    },
+    {
+      name: "theme-color",
+      content: "#33058d",
+    },
+    {
+      tagName: "link",
+      rel: "canonical",
+      href: "https://pwhl-remix.vercel.app",
+    },
+    {
+      charSet: "utf-8",
+    },
+    {
+      name: "viewport",
+      content: "width=device-width,initial-scale=1",
+    },
   ];
 };
 
@@ -32,8 +52,6 @@ const App = () => {
   return (
     <html lang="en">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
       </head>
