@@ -10,6 +10,7 @@ import {
 import type { MetaFunction, LinksFunction } from "@remix-run/node";
 import { Analytics } from "@vercel/analytics/react";
 import "~/tailwind.css";
+import { useServiceWorker } from "./hooks/useServiceWorker";
 
 export const meta: MetaFunction = () => {
   return [
@@ -21,10 +22,13 @@ export const meta: MetaFunction = () => {
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-  { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+  { rel: "icon", href: "/icons/favicon.ico", type: "image/x-icon" },
+  { rel: "manifest", href: "/resources/manifest.json" },
 ];
 
 const App = () => {
+  useServiceWorker();
+
   return (
     <html lang="en">
       <head>
