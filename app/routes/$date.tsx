@@ -1,12 +1,12 @@
 import type { LoaderFunction } from "@remix-run/node";
-import { json, useLoaderData, useParams } from "@remix-run/react";
+import { json, useParams } from "@remix-run/react";
 import { getGamesByDate } from "~/api";
 import { DateSelector } from "~/components/DateSelector";
 import { GamesList } from "~/components/GamesList";
 import { Layout } from "~/components/Layout";
-import type { Game } from "~/components/types";
 import { normalizeGames } from "~/data/normalization/games";
 import { useDays } from "~/hooks/useDays";
+import { useLoadedGames } from "~/hooks/useLoadedGames";
 
 export const loader: LoaderFunction = async ({ params }) => {
   const { date } = params;
@@ -24,7 +24,7 @@ export const loader: LoaderFunction = async ({ params }) => {
 export const Index = () => {
   const { date } = useParams();
   const { prevDay, day, nextDay } = useDays(date);
-  const games = useLoaderData<Game[]>();
+  const games = useLoadedGames(`/${date}`);
 
   return (
     <Layout>

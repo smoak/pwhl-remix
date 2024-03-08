@@ -1,14 +1,13 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
 import { getGamesByDate } from "~/api";
 import { DateSelector } from "~/components/DateSelector";
 import { GamesList } from "~/components/GamesList";
 import { Layout } from "~/components/Layout";
-import type { Game } from "~/components/types";
 import { normalizeGames } from "~/data/normalization/games";
 import { getToday } from "~/date-fns";
 import { useDays } from "~/hooks/useDays";
+import { useLoadedGames } from "~/hooks/useLoadedGames";
 
 export const loader: LoaderFunction = async () => {
   const today = getToday();
@@ -20,7 +19,7 @@ export const loader: LoaderFunction = async () => {
 };
 
 const Index = () => {
-  const games = useLoaderData<Game[]>();
+  const games = useLoadedGames("?index");
   const { day, nextDay, prevDay } = useDays();
 
   return (
