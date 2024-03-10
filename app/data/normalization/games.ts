@@ -33,7 +33,10 @@ const normalizeGame = (apiGame: ScheduledGame): Game => {
       homeScore: parseInt(apiGame.HomeGoals),
       visitingScore: parseInt(apiGame.VisitorGoals),
       gameState: "Final",
-      endState: normalizeEndState(apiGame.GameStatusStringLong),
+      endState: normalizeEndState({
+        gameStatusStringLong: apiGame.GameStatusStringLong,
+        endedInPeriod: parseInt(apiGame.Period),
+      }),
     };
 
     return finalGame;

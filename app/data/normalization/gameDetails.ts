@@ -23,8 +23,11 @@ import { normalizeEndState } from "./endState";
 const normalizeFinalGame = ({
   details,
   homeTeam,
+  periods,
   visitingTeam,
 }: GameSummaryResponse): FinalGame => {
+  const endedInPeriod = parseInt(periods[periods.length - 1].info.id);
+
   return {
     gameDate: details.GameDateISO8601,
     gameState: "Final",
@@ -41,7 +44,10 @@ const normalizeFinalGame = ({
       logoUrl: visitingTeam.info.logo,
       name: visitingTeam.info.nickname,
     },
-    endState: normalizeEndState(details.status),
+    endState: normalizeEndState({
+      gameStatusStringLong: details.status,
+      endedInPeriod,
+    }),
   };
 };
 

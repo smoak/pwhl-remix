@@ -1,16 +1,20 @@
 import type { EndState } from "~/components/types";
 
-export const normalizeEndState = (gameStatusStringLong: string): EndState => {
+type NormalizeEndStateOptions = {
+  readonly gameStatusStringLong: string;
+  readonly endedInPeriod: number;
+};
+export const normalizeEndState = ({
+  endedInPeriod,
+  gameStatusStringLong,
+}: NormalizeEndStateOptions): EndState => {
   if (gameStatusStringLong === "Final SO") {
     return "SO";
   }
 
-  if (
-    gameStatusStringLong === "Final" ||
-    gameStatusStringLong === "Unofficial Final"
-  ) {
-    return "Regulation";
+  if (gameStatusStringLong === "Unofficial Final" && endedInPeriod > 3) {
+    return "OT";
   }
 
-  return "OT";
+  return "Regulation";
 };
