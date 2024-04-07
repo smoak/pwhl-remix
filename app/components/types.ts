@@ -43,6 +43,10 @@ export type Team = {
   readonly id: number;
   readonly name: string;
   readonly logoUrl: string;
+  readonly wins: number;
+  readonly otLosses: number;
+  readonly losses: number;
+  readonly record: string;
 };
 
 export type TeamStats = {

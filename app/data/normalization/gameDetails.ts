@@ -16,6 +16,7 @@ import type {
   ScoringPlay,
   ScoringPlayAssister,
   ScoringPlays,
+  Team,
   TeamStats,
 } from "~/components/types";
 import { normalizeEndState } from "./endState";
@@ -32,22 +33,26 @@ const normalizeFinalGame = ({
     gameDate: details.GameDateISO8601,
     gameState: "Final",
     homeScore: homeTeam.stats.goals,
-    homeTeam: {
-      id: homeTeam.info.id,
-      logoUrl: homeTeam.info.logo,
-      name: homeTeam.info.nickname,
-    },
+    homeTeam: normalizeTeam(homeTeam),
     id: details.id,
     visitingScore: visitingTeam.stats.goals,
-    visitingTeam: {
-      id: visitingTeam.info.id,
-      logoUrl: visitingTeam.info.logo,
-      name: visitingTeam.info.nickname,
-    },
+    visitingTeam: normalizeTeam(visitingTeam),
     endState: normalizeEndState({
       gameStatusStringLong: details.status,
       endedInPeriod,
     }),
+  };
+};
+
+const normalizeTeam = (team: GameSummaryTeam): Team => {
+  return {
+    id: team.info.id,
+    logoUrl: team.info.logo,
+    name: team.info.nickname,
+    losses: team.seasonStats.teamRecord.losses,
+    otLosses: team.seasonStats.teamRecord.OTLosses,
+    record: team.seasonStats.teamRecord.formattedRecord,
+    wins: team.seasonStats.teamRecord.wins,
   };
 };
 
@@ -59,17 +64,9 @@ const normalizeScheduledGame = ({
   return {
     gameDate: details.GameDateISO8601,
     gameState: "Scheduled",
-    homeTeam: {
-      id: homeTeam.info.id,
-      logoUrl: homeTeam.info.logo,
-      name: homeTeam.info.nickname,
-    },
+    homeTeam: normalizeTeam(homeTeam),
     id: details.id,
-    visitingTeam: {
-      id: visitingTeam.info.id,
-      logoUrl: visitingTeam.info.logo,
-      name: visitingTeam.info.nickname,
-    },
+    visitingTeam: normalizeTeam(visitingTeam),
   };
 };
 
@@ -131,17 +128,9 @@ const normalizeLiveGame = ({
     },
     homeScore: homeTeam.stats.goals,
     visitingScore: visitingTeam.stats.goals,
-    homeTeam: {
-      id: homeTeam.info.id,
-      logoUrl: homeTeam.info.logo,
-      name: homeTeam.info.nickname,
-    },
+    homeTeam: normalizeTeam(homeTeam),
     id: details.id,
-    visitingTeam: {
-      id: visitingTeam.info.id,
-      logoUrl: visitingTeam.info.logo,
-      name: visitingTeam.info.nickname,
-    },
+    visitingTeam: normalizeTeam(visitingTeam),
   };
 };
 
