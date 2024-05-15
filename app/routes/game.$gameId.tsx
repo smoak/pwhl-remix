@@ -6,7 +6,8 @@ import { BackButton } from "~/components/BackButton";
 import { GameCard } from "~/components/GameCard";
 import { GameSummary } from "~/components/GameSummary";
 import { Layout } from "~/components/Layout";
-import type { GameDetails } from "~/components/types";
+import { type WithBootstrap, type GameDetails } from "~/components/types";
+import { normalizeBootstrap } from "~/data/normalization/bootstrap";
 import { normalizeGameDetails } from "~/data/normalization/gameDetails";
 
 export const loader: LoaderFunction = async ({ params }) => {
@@ -19,12 +20,16 @@ export const loader: LoaderFunction = async ({ params }) => {
   const gameSummary = await getGameSummary(gameId);
   const bootstrap = await getBootstrap();
   const gameDetails = normalizeGameDetails(gameSummary, bootstrap);
+  const normalizedBootstrap = normalizeBootstrap(bootstrap);
 
-  return json(gameDetails);
+  return json<WithBootstrap<GameDetails>>({
+    content: gameDetails,
+    ...normalizedBootstrap,
+  });
 };
 
 export const Index = () => {
-  const gameDetails = useLoaderData<GameDetails>();
+  const { content: gameDetails } = useLoaderData<WithBootstrap<GameDetails>>();
 
   return (
     <Layout>

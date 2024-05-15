@@ -4,6 +4,7 @@ import type {
   BootstrapResponse,
   GameSummaryResponse,
   ModulekitResponse,
+  PlayoffBracketResponse,
   ScheduledGame,
   StandingsResponse,
 } from "./types";
@@ -79,12 +80,10 @@ export const getGamesByDate: GetGamesByDate = async (date) => {
 
 type GetGameSummary = (gameId: string) => Promise<GameSummaryResponse>;
 export const getGameSummary: GetGameSummary = async (gameId) => {
-  const url = new URL(BASE_URL);
+  const url = requestWithKeys(new URL(BASE_URL));
   url.searchParams.append("feed", "statviewfeed");
   url.searchParams.append("view", "gameSummary");
   url.searchParams.append("game_id", gameId);
-  url.searchParams.append("key", CLIENT_KEY);
-  url.searchParams.append("client_code", CLIENT_CODE);
   url.searchParams.append("fmt", "json");
   console.log("hitting url", url.toString());
 
@@ -99,7 +98,7 @@ export const getGameSummary: GetGameSummary = async (gameId) => {
 
 type GetStandings = () => Promise<StandingsResponse>;
 export const getStandings: GetStandings = async () => {
-  const url = new URL(BASE_URL);
+  const url = requestWithKeys(new URL(BASE_URL));
   url.searchParams.append("feed", "statviewfeed");
   url.searchParams.append("view", "teams");
   url.searchParams.append("groupTeamsBy", "division");
@@ -107,8 +106,6 @@ export const getStandings: GetStandings = async () => {
   url.searchParams.append("site_id", "2");
   url.searchParams.append("season", "1");
   url.searchParams.append("special", "false");
-  url.searchParams.append("key", CLIENT_KEY);
-  url.searchParams.append("client_code", CLIENT_CODE);
   console.log("hitting url", url.toString());
 
   const response = await fetch(url.toString());
@@ -119,4 +116,18 @@ export const getStandings: GetStandings = async () => {
   ) as StandingsResponse;
 
   return standingsResponse;
+};
+
+type GetPlayoffBracket = () => Promise<PlayoffBracketResponse>;
+export const getPlayoffBracket: GetPlayoffBracket = async () => {
+  const url = requestWithKeys(new URL(BASE_URL));
+  url.searchParams.append("feed", "modulekit");
+  url.searchParams.append("view", "brackets");
+  url.searchParams.append("fmt", "json");
+  console.log("hitting url", url.toString());
+
+  const response = await fetch(url.toString());
+  const responseJson = await response.json();
+
+  return responseJson as PlayoffBracketResponse;
 };

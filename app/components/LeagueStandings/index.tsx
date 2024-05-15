@@ -1,5 +1,5 @@
 import { useLoaderData } from "@remix-run/react";
-import { type Standings } from "../types";
+import { type WithBootstrap, type Standings } from "../types";
 import { TeamLogo } from "../TeamLogo";
 
 type CellProps = {
@@ -20,7 +20,7 @@ const Cell = ({ children, className }: CellProps) => {
 };
 
 export const LeagueStandings = () => {
-  const standings = useLoaderData<Standings>();
+  const { content: standings } = useLoaderData<WithBootstrap<Standings>>();
 
   return (
     <div className="inline-flex w-full flex-col gap-8">

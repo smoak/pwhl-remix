@@ -6,6 +6,8 @@ export type Season = {
 };
 
 export type BootstrapResponse = {
+  readonly current_league_id: string;
+  readonly current_season_id: string;
   readonly regularSeasons: Season[];
   readonly playoffSeasons: Season[];
 };
@@ -231,3 +233,51 @@ export type StandingsResponseObject = {
 };
 
 export type StandingsResponse = StandingsResponseObject[];
+
+export type PlayoffMatchup = {
+  readonly series_letter: string;
+  readonly series_name: string;
+  readonly series_logo: string;
+  readonly round: string;
+  readonly active: string;
+  readonly team1: string;
+  readonly team2: string;
+  readonly winner: string;
+  readonly games: object[];
+  readonly team1_wins: number;
+  readonly team2_wins: number;
+  readonly ties: number;
+};
+
+export type PlayoffBracketRound = {
+  readonly round: string;
+  readonly round_name: string;
+  readonly season_id: string;
+  readonly round_type_id: string;
+  readonly round_type_name: string;
+  readonly matchups: PlayoffMatchup[];
+};
+
+export type PlayoffTeam = {
+  readonly id: string;
+  readonly city: string;
+  readonly team_code: string;
+  readonly name: string;
+  readonly division_long_name: string;
+  readonly division_short_name: string;
+  readonly conf_id: string;
+  readonly logo: string;
+};
+
+export type PlayoffTeams = Record<string, PlayoffTeam>;
+
+export type PlayoffBracketResponse = {
+  readonly SiteKit: {
+    readonly Brackets: {
+      readonly teams: PlayoffTeams;
+      readonly rounds: PlayoffBracketRound[];
+      readonly logo: string;
+      readonly show_ties: boolean;
+    };
+  };
+};
