@@ -24,6 +24,12 @@ export const Header = () => (
       >
         Standings
       </NavLink>
+      <NavLink
+        to="/playoffs"
+        className={({ isActive }) => (isActive ? activeLinkClass : linkClass)}
+      >
+        Playoffs
+      </NavLink>
     </nav>
   </header>
 );
