@@ -1,8 +1,5 @@
-import nProgressStyles from "nprogress/nprogress.css";
-import { cssBundleHref } from "@remix-run/css-bundle";
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -10,7 +7,7 @@ import {
 } from "@remix-run/react";
 import type { MetaFunction, LinksFunction } from "@remix-run/node";
 import { Analytics } from "@vercel/analytics/react";
-import "~/tailwind.css";
+import "./tailwind.css";
 import { useServiceWorker } from "./hooks/useServiceWorker";
 import { useNProgress } from "./hooks/useNProgress";
 
@@ -43,10 +40,12 @@ export const meta: MetaFunction = () => {
 };
 
 export const links: LinksFunction = () => [
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-  { rel: "stylesheet", href: nProgressStyles },
   { rel: "icon", href: "/icons/favicon.ico", type: "image/x-icon" },
   { rel: "manifest", href: "/resources/manifest.json" },
+  {
+    rel: "stylesheet",
+    href: "https://unpkg.com/nprogress@0.2.0/nprogress.css",
+  },
 ];
 
 const App = () => {
@@ -58,12 +57,12 @@ const App = () => {
       <head>
         <Meta />
         <Links />
+        <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js" />
       </head>
       <body>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
         <Analytics />
       </body>
     </html>

@@ -13,3 +13,5 @@ node_modules
 public/entry.worker.js
 
 coverage
+
+vite.config.ts.timestamp-*
