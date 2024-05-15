@@ -1,7 +1,7 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { getGameSummary } from "~/api";
+import { getBootstrap, getGameSummary } from "~/api";
 import { BackButton } from "~/components/BackButton";
 import { GameCard } from "~/components/GameCard";
 import { GameSummary } from "~/components/GameSummary";
@@ -17,7 +17,8 @@ export const loader: LoaderFunction = async ({ params }) => {
   }
 
   const gameSummary = await getGameSummary(gameId);
-  const gameDetails = normalizeGameDetails(gameSummary);
+  const bootstrap = await getBootstrap();
+  const gameDetails = normalizeGameDetails(gameSummary, bootstrap);
 
   return json(gameDetails);
 };

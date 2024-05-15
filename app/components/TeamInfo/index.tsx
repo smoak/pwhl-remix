@@ -6,10 +6,12 @@ export type TeamInfoProps = {
   readonly record: string;
 };
 
-export const TeamInfo = ({ logoUrl, record, teamName }: TeamInfoProps) => (
-  <div className="flex w-1/3 flex-col items-center text-center">
-    <TeamLogo logoUrl={logoUrl} teamName={teamName} size="md" />
-    {teamName}
-    <p className="text-xs">{record}</p>
-  </div>
-);
+export const TeamInfo = ({ logoUrl, record, teamName }: TeamInfoProps) => {
+  return (
+    <div className="flex w-1/3 flex-col items-center text-center">
+      <TeamLogo logoUrl={logoUrl} teamName={teamName} size="md" />
+      {teamName}
+      <p className="text-xs">{record}</p>
+    </div>
+  );
+};

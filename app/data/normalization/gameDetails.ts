@@ -1,4 +1,5 @@
 import type {
+  BootstrapResponse,
   GameSummaryPeriod,
   GameSummaryPeriodGoal,
   GameSummaryPeriodGoalAssist,
@@ -20,17 +21,22 @@ import type {
   TeamStats,
 } from "~/components/types";
 import { normalizeEndState } from "./endState";
+import { normalizeGameType } from "./gameType";
 
-const normalizeFinalGame = ({
-  details,
-  homeTeam,
-  periods,
-  visitingTeam,
-}: GameSummaryResponse): FinalGame => {
+const normalizeFinalGame = (
+  { details, homeTeam, periods, visitingTeam }: GameSummaryResponse,
+  bootstrapResponse: BootstrapResponse
+): FinalGame => {
   const endedInPeriod = parseInt(periods[periods.length - 1].info.id);
+  const gameType = normalizeGameType(
+    bootstrapResponse.playoffSeasons,
+    details.seasonId
+  );
 
   return {
     gameDate: details.GameDateISO8601,
+    endedInPeriod,
+    type: gameType,
     gameState: "Final",
     homeScore: homeTeam.stats.goals,
     homeTeam: normalizeTeam(homeTeam),
@@ -56,12 +62,17 @@ const normalizeTeam = (team: GameSummaryTeam): Team => {
   };
 };
 
-const normalizeScheduledGame = ({
-  details,
-  homeTeam,
-  visitingTeam,
-}: GameSummaryResponse): ScheduledGame => {
+const normalizeScheduledGame = (
+  { details, homeTeam, visitingTeam }: GameSummaryResponse,
+  bootstrapResponse: BootstrapResponse
+): ScheduledGame => {
+  const gameType = normalizeGameType(
+    bootstrapResponse.playoffSeasons,
+    details.seasonId
+  );
+
   return {
+    type: gameType,
     gameDate: details.GameDateISO8601,
     gameState: "Scheduled",
     homeTeam: normalizeTeam(homeTeam),
@@ -96,7 +107,10 @@ const normalizeGameStats = (apiGameSummary: GameSummaryResponse): GameStats => {
     homeTeam: normalizeTeamStats(apiGameSummary.homeTeam),
     visitingTeam: normalizeTeamStats(apiGameSummary.visitingTeam),
     periods: apiGameSummary.periods.map(normalizeGameSummaryPeriod),
-    scoringPlays: normalizeScoringDetails(apiGameSummary.periods),
+    scoringPlays: normalizeScoringDetails(
+      apiGameSummary.periods,
+      apiGameSummary.shootoutDetails
+    ),
   };
 };
 
@@ -108,17 +122,20 @@ const normalizeClockTime = (status: string): string => {
   return status.substring(13, 18).trim();
 };
 
-const normalizeLiveGame = ({
-  details,
-  homeTeam,
-  periods,
-  visitingTeam,
-}: GameSummaryResponse): LiveGame => {
+const normalizeLiveGame = (
+  { details, homeTeam, periods, visitingTeam }: GameSummaryResponse,
+  bootstrapResponse: BootstrapResponse
+): LiveGame => {
   const period = parseInt(periods[periods.length - 1].info.id);
   const clockTime = normalizeClockTime(details.status);
+  const gameType = normalizeGameType(
+    bootstrapResponse.playoffSeasons,
+    details.seasonId
+  );
 
   return {
     gameDate: details.GameDateISO8601,
+    type: gameType,
     gameState: "Live",
     gameClock: {
       clockTime,
@@ -170,54 +187,133 @@ const normalizeGoalType = ({
   return "Even";
 };
 
-const normalizeScoringDetails = (periods: GameSummaryResponse["periods"]) => {
-  return periods.reduce<ScoringPlays>((accum, scoring) => {
-    const periodNum = parseInt(scoring.info.id);
-    accum[periodNum] = scoring.goals.map<ScoringPlay>((goal) => {
-      const primaryAssist = normalizeAssist(
-        goal.assists[0],
-        parseInt(goal.assistNumbers[0])
-      );
-      const secondaryAssist = normalizeAssist(
-        goal.assists[1],
-        parseInt(goal.assistNumbers[1])
-      );
+const normalizeScoringPlay = ({
+  goals,
+  info,
+  stats,
+}: GameSummaryPeriod): ScoringPlay[] => {
+  const periodNum = parseInt(info.id);
+  return goals.map<ScoringPlay>((goal) => {
+    const primaryAssist = normalizeAssist(
+      goal.assists[0],
+      parseInt(goal.assistNumbers[0])
+    );
+    const secondaryAssist = normalizeAssist(
+      goal.assists[1],
+      parseInt(goal.assistNumbers[1])
+    );
 
-      return {
-        goalScorer: {
-          id: goal.scoredBy.id,
-          firstName: goal.scoredBy.firstName,
-          headshotUrl: goal.scoredBy.playerImageURL,
-          lastName: goal.scoredBy.lastName,
-          seasonGoals: parseInt(goal.scorerGoalNumber),
-        },
-        period: periodNum,
-        scoringTeam: {
-          id: goal.team.id,
-          logoUrl: goal.team.logo,
-          name: goal.team.name,
-        },
-        timeInPeriod: goal.time,
-        primaryAssist,
-        secondaryAssist,
-        goalType: normalizeGoalType(goal.properties),
-      };
-    });
+    return {
+      goalScorer: {
+        id: goal.scoredBy.id,
+        firstName: goal.scoredBy.firstName,
+        headshotUrl: goal.scoredBy.playerImageURL,
+        lastName: goal.scoredBy.lastName,
+        seasonGoals: parseInt(goal.scorerGoalNumber),
+      },
+      period: periodNum,
+      scoringTeam: {
+        id: goal.team.id,
+        logoUrl: goal.team.logo,
+        name: goal.team.name,
+      },
+      timeInPeriod: goal.time,
+      primaryAssist,
+      secondaryAssist,
+      goalType: normalizeGoalType(goal.properties),
+    };
+  });
+};
 
-    return accum;
-  }, {});
+const normalizeOvertimeScoringPlay = (
+  period?: GameSummaryPeriod
+): ScoringPlays["overtime"] => {
+  if (!period) {
+    return;
+  }
+
+  const overtime = normalizeScoringPlay(period);
+
+  return {
+    otPeriod: parseInt(period.info.id) - 3,
+    scoringPlay: overtime[0],
+  };
+};
+
+const normalizeShootoutScoringPlay = (
+  shootoutDetails: GameSummaryResponse["shootoutDetails"]
+): ScoringPlays["shootout"] => {
+  if (!shootoutDetails) {
+    return;
+  }
+
+  const { homeTeamShots, visitingTeamShots } = shootoutDetails;
+
+  const winningShot = [...homeTeamShots, ...visitingTeamShots].find(
+    (s) => s.isGameWinningGoal
+  );
+
+  if (winningShot != null) {
+    return {
+      goalScorer: {
+        id: winningShot.shooter.id,
+        firstName: winningShot.shooter.firstName,
+        lastName: winningShot.shooter.lastName,
+        headshotUrl: winningShot.shooter.playerImageURL,
+        seasonGoals: 0,
+      },
+      goalType: "Even",
+      period: 4,
+      scoringTeam: {
+        id: winningShot.shooterTeam.id,
+        logoUrl: winningShot.shooterTeam.logo,
+        name: winningShot.shooterTeam.name,
+      },
+      timeInPeriod: "",
+    };
+  }
+};
+
+const normalizeScoringDetails = (
+  periods: GameSummaryResponse["periods"],
+  shootoutDetails: GameSummaryResponse["shootoutDetails"]
+): ScoringPlays => {
+  const firstPeriod = periods
+    .filter((p) => parseInt(p.info.id) === 1)
+    .flatMap(normalizeScoringPlay);
+  const secondPeriod = periods
+    .filter((p) => parseInt(p.info.id) === 2)
+    .flatMap(normalizeScoringPlay);
+  const thirdPeriod = periods
+    .filter((p) => parseInt(p.info.id) === 3)
+    .flatMap(normalizeScoringPlay);
+  const otScoring = periods.find(
+    (p) => p.goals.length > 0 && p.info.shortName.startsWith("OT")
+  );
+
+  return {
+    firstPeriod,
+    secondPeriod,
+    thirdPeriod,
+    overtime: normalizeOvertimeScoringPlay(otScoring),
+    shootout: normalizeShootoutScoringPlay(shootoutDetails),
+  };
 };
 
 type NormalizeGameDetails = (
-  apiGameSummary: GameSummaryResponse
+  apiGameSummary: GameSummaryResponse,
+  bootstrapResponse: BootstrapResponse
 ) => GameDetails;
-export const normalizeGameDetails: NormalizeGameDetails = (apiGameSummary) => {
+export const normalizeGameDetails: NormalizeGameDetails = (
+  apiGameSummary,
+  bootstrapResponse
+) => {
   if (
     apiGameSummary.details.final === "1" ||
     apiGameSummary.details.status === "Unofficial Final"
   ) {
     return {
-      game: normalizeFinalGame(apiGameSummary),
+      game: normalizeFinalGame(apiGameSummary, bootstrapResponse),
       gameStats: normalizeGameStats(apiGameSummary),
     };
   }
@@ -227,13 +323,13 @@ export const normalizeGameDetails: NormalizeGameDetails = (apiGameSummary) => {
     apiGameSummary.details.final === "0"
   ) {
     return {
-      game: normalizeScheduledGame(apiGameSummary),
+      game: normalizeScheduledGame(apiGameSummary, bootstrapResponse),
       gameStats: normalizeGameStats(apiGameSummary),
     };
   }
 
   return {
-    game: normalizeLiveGame(apiGameSummary),
+    game: normalizeLiveGame(apiGameSummary, bootstrapResponse),
     gameStats: normalizeGameStats(apiGameSummary),
   };
 };

@@ -1,5 +1,15 @@
 export type GameStatus = "1" | "2" | "3" | "4" | "10";
 
+export type Season = {
+  readonly id: string;
+  readonly name: string;
+};
+
+export type BootstrapResponse = {
+  readonly regularSeasons: Season[];
+  readonly playoffSeasons: Season[];
+};
+
 export type ScheduledGame = {
   readonly ID: string;
   readonly SeasonID: string;
@@ -140,9 +150,44 @@ export type GameSummaryTeam = {
   };
 };
 
+export type ShootoutTeam = {
+  readonly id: number;
+  readonly name: string;
+  readonly city: string;
+  readonly nickname: string;
+  readonly abbreviation: string;
+  readonly logo: string;
+  readonly divisionName: string;
+};
+
+export type ShootoutPlayer = {
+  readonly id: number;
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly jerseyNumber: number;
+  readonly position: string;
+  readonly birthDate: string;
+  readonly playerImageURL: string;
+};
+
+export type ShootoutShot = {
+  readonly shooter: ShootoutPlayer;
+  readonly goalie: ShootoutPlayer;
+  readonly isGoal: boolean;
+  readonly isGameWinningGoal: boolean;
+  readonly shooterTeam: ShootoutTeam;
+};
+
+export type ShootoutDetails = {
+  readonly homeTeamShots: ShootoutShot[];
+  readonly visitingTeamShots: ShootoutShot[];
+  readonly winningTeam: ShootoutTeam;
+};
+
 export type GameSummaryResponse = {
   readonly details: GameSummaryDetails;
   readonly hasShooutout: boolean;
+  readonly shootoutDetails?: ShootoutDetails;
   readonly homeTeam: GameSummaryTeam;
   readonly visitingTeam: GameSummaryTeam;
   readonly periods: GameSummaryPeriod[];

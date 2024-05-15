@@ -1,4 +1,4 @@
-import type { GameStatus, ScheduledGame } from "~/api/types";
+import type { BootstrapResponse, GameStatus, ScheduledGame } from "~/api/types";
 import type {
   FinalGame,
   Game,
@@ -7,6 +7,7 @@ import type {
   Team,
 } from "~/components/types";
 import { normalizeEndState } from "./endState";
+import { normalizeGameType } from "./gameType";
 
 const ApiGameStatusToGameState: Record<GameStatus, GameState> = {
   "1": "Scheduled",
@@ -56,8 +57,12 @@ const normalizeVisitingTeam = (apiGame: ScheduledGame): Team => {
   };
 };
 
-const normalizeGame = (apiGame: ScheduledGame): Game => {
+const normalizeGame = (
+  apiGame: ScheduledGame,
+  bootstrapResponse: BootstrapResponse
+): Game => {
   const baseGame = {
+    type: normalizeGameType(bootstrapResponse.playoffSeasons, apiGame.SeasonID),
     id: parseInt(apiGame.ID),
     gameState: ApiGameStatusToGameState[apiGame.GameStatus],
     homeTeam: normalizeHomeTeam(apiGame),
@@ -66,8 +71,11 @@ const normalizeGame = (apiGame: ScheduledGame): Game => {
   };
 
   if (["3", "4"].includes(apiGame.GameStatus)) {
+    const endedInPeriod = parseInt(apiGame.Period);
+
     const finalGame: FinalGame = {
       ...baseGame,
+      endedInPeriod,
       homeScore: parseInt(apiGame.HomeGoals),
       visitingScore: parseInt(apiGame.VisitorGoals),
       gameState: "Final",
@@ -102,6 +110,9 @@ const normalizeGame = (apiGame: ScheduledGame): Game => {
   };
 };
 
-type NormalizeGames = (apiGames: ScheduledGame[]) => Game[];
-export const normalizeGames: NormalizeGames = (apiGames) =>
-  apiGames.map(normalizeGame);
+type NormalizeGames = (
+  apiGames: ScheduledGame[],
+  bootstrapResponse: BootstrapResponse
+) => Game[];
+export const normalizeGames: NormalizeGames = (apiGames, bootstrapResponse) =>
+  apiGames.map((game) => normalizeGame(game, bootstrapResponse));

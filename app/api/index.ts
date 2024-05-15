@@ -1,6 +1,7 @@
 import { fetch } from "cross-fetch";
 import { getToday } from "~/date-fns";
 import type {
+  BootstrapResponse,
   GameSummaryResponse,
   ModulekitResponse,
   ScheduledGame,
@@ -36,12 +37,32 @@ const calculateDaysByDate = (date?: Date) => {
   };
 };
 
-type GetGamesByDate = (date?: Date) => Promise<ScheduledGame[]>;
-export const getGamesByDate: GetGamesByDate = async (date) => {
-  const url = new URL(BASE_URL);
-  url.searchParams.append("feed", "modulekit");
+const requestWithKeys = (url: URL): URL => {
   url.searchParams.append("key", CLIENT_KEY);
   url.searchParams.append("client_code", CLIENT_CODE);
+  return url;
+};
+
+type GetBootstrap = () => Promise<BootstrapResponse>;
+export const getBootstrap: GetBootstrap = async () => {
+  const url = requestWithKeys(new URL(BASE_URL));
+  url.searchParams.append("feed", "statviewfeed");
+  url.searchParams.append("view", "bootstrap");
+  console.log("hitting url", url.toString());
+  const response = await fetch(url.toString());
+  const responseText = await response.text();
+
+  const bootstrapResponse = JSON.parse(
+    responseText.substring(1, responseText.length - 1)
+  ) as BootstrapResponse;
+
+  return bootstrapResponse;
+};
+
+type GetGamesByDate = (date?: Date) => Promise<ScheduledGame[]>;
+export const getGamesByDate: GetGamesByDate = async (date) => {
+  const url = requestWithKeys(new URL(BASE_URL));
+  url.searchParams.append("feed", "modulekit");
   url.searchParams.append("view", "scorebar");
   url.searchParams.append("fmt", "json");
   const { daysAhead, daysBack } = calculateDaysByDate(date);

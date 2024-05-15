@@ -1,6 +1,6 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { json, useLoaderData, useParams } from "@remix-run/react";
-import { getGamesByDate } from "~/api";
+import { getBootstrap, getGamesByDate } from "~/api";
 import { DateSelector } from "~/components/DateSelector";
 import { GamesList } from "~/components/GamesList";
 import { Layout } from "~/components/Layout";
@@ -15,8 +15,9 @@ export const loader: LoaderFunction = async ({ params }) => {
     throw new Response(null, { status: 404, statusText: "Not Found" });
   }
   const scheduledGames = await getGamesByDate(new Date(date));
+  const bootstrap = await getBootstrap();
 
-  const normalizedGames = normalizeGames(scheduledGames);
+  const normalizedGames = normalizeGames(scheduledGames, bootstrap);
 
   return json(normalizedGames);
 };

@@ -1,11 +1,12 @@
 export type GameState = "Live" | "Scheduled" | "Final";
-
+export type GameType = "RegularSeason" | "PreSeason" | "Playoff";
 export type EndState = "Regulation" | "OT" | "SO";
 
 export type Game = LiveGame | ScheduledGame | FinalGame;
 
 type BaseGame = {
   readonly id: number;
+  readonly type: GameType;
   readonly homeTeam: Team;
   readonly visitingTeam: Team;
   readonly gameState: GameState;
@@ -32,6 +33,7 @@ export type FinalGame =
       readonly homeScore: number;
       readonly visitingScore: number;
       readonly endState: EndState;
+      readonly endedInPeriod: number;
     };
 
 export type ScheduledGame =
@@ -93,7 +95,19 @@ export type ScoringPlay = {
   readonly primaryAssist?: ScoringPlayAssister;
   readonly secondaryAssist?: ScoringPlayAssister;
 };
-export type ScoringPlays = Record<number, ScoringPlay[]>;
+
+export type OvertimeScoringPlay = {
+  readonly otPeriod: number;
+  readonly scoringPlay: ScoringPlay;
+};
+
+export type ScoringPlays = {
+  readonly firstPeriod: ScoringPlay[];
+  readonly secondPeriod: ScoringPlay[];
+  readonly thirdPeriod: ScoringPlay[];
+  readonly overtime?: OvertimeScoringPlay;
+  readonly shootout?: ScoringPlay;
+};
 
 export type GameStats = {
   readonly homeTeam: TeamStats;
