@@ -17,6 +17,7 @@
     "noEmit": true,
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["@testing-library/jest-dom"]
   }
 }
