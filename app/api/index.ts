@@ -96,15 +96,15 @@ export const getGameSummary: GetGameSummary = async (gameId) => {
   return gameSummaryResponse;
 };
 
-type GetStandings = () => Promise<StandingsResponse>;
-export const getStandings: GetStandings = async () => {
+type GetStandings = (seasonId: string) => Promise<StandingsResponse>;
+export const getStandings: GetStandings = async (seasonId) => {
   const url = requestWithKeys(new URL(BASE_URL));
   url.searchParams.append("feed", "statviewfeed");
   url.searchParams.append("view", "teams");
   url.searchParams.append("groupTeamsBy", "division");
   url.searchParams.append("context", "overall");
   url.searchParams.append("site_id", "2");
-  url.searchParams.append("season", "1");
+  url.searchParams.append("season", seasonId);
   url.searchParams.append("special", "false");
   console.log("hitting url", url.toString());
 

@@ -7,8 +7,8 @@ import { normalizeBootstrap } from "~/data/normalization/bootstrap";
 import { normalizeStandings } from "~/data/normalization/standings";
 
 export const loader: LoaderFunction = async () => {
-  const standingsResponse = await getStandings();
   const bootstrap = await getBootstrap();
+  const standingsResponse = await getStandings(bootstrap.current_season_id);
 
   const normalizedStandings = normalizeStandings(standingsResponse);
   const normalizedBootstrap = normalizeBootstrap(bootstrap);
