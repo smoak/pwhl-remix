@@ -29,8 +29,8 @@
   "license": "ISC",
   "dependencies": {
     "@heroicons/react": "^2.1.5",
-    "@remix-run/node": "^2.5.0",
-    "@remix-run/react": "^2.5.0",
+    "@remix-run/node": "^2.14.0",
+    "@remix-run/react": "^2.14.0",
     "@vercel/analytics": "^1.0.2",
     "cross-fetch": "^3.1.5",
     "date-fns": "^2.29.3",
@@ -40,7 +40,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@remix-run/dev": "^2.5.0",
+    "@remix-run/dev": "^2.14.0",
     "@remix-run/eslint-config": "^2.0.0",
     "@svgr/cli": "^8.1.0",
     "@svgr/plugin-jsx": "^8.1.0",
@@ -66,7 +66,7 @@
     "vitest": "^1.6.0"
   },
   "volta": {
-    "node": "18.19.0"
+    "node": "22.11.0"
   },
   "engines": {
     "node": ">= 18"
