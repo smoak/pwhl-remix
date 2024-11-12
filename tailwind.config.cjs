@@ -34,4 +34,5 @@ module.exports = {
       },
     },
   },
+  plugins: [require("tailwindcss-react-aria-components")],
 };

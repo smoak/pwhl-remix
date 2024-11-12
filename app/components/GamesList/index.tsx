@@ -1,14 +1,18 @@
 import { GameCard } from "~/components/GameCard";
 import type { Game } from "../types";
 import { useHydration } from "~/hooks/useHydration";
-import { isSameDay } from "date-fns";
 import { Suspense } from "react";
 import { Skeleton } from "./Skeleton";
 import { Link } from "@remix-run/react";
+import {
+  CalendarDate,
+  isSameDay,
+  parseAbsoluteToLocal,
+} from "@internationalized/date";
 
 export type GamesListProps = {
   readonly games: Game[];
-  readonly filter: Date;
+  readonly filter: CalendarDate;
 };
 
 const FilteredGamesList = ({ games }: Omit<GamesListProps, "filter">) => {
@@ -43,7 +47,7 @@ export const GamesList = ({ games, filter }: GamesListProps) => {
   }
 
   const filteredGames = games.filter((g) =>
-    isSameDay(filter, new Date(g.gameDate))
+    isSameDay(filter, parseAbsoluteToLocal(g.gameDate))
   );
 
   return (
