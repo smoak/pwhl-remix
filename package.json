@@ -28,7 +28,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@heroicons/react": "^2.1.1",
+    "@heroicons/react": "^2.1.5",
     "@remix-run/css-bundle": "^2.1.0",
     "@remix-run/node": "^2.5.0",
     "@remix-run/react": "^2.5.0",
