@@ -81,7 +81,7 @@ export const Picker = ({ date, onDateChanged }: PickerProps) => {
                 {(date) => (
                   <CalendarCell
                     date={date}
-                    className="ring-black-600/70 selected:bg-pwhl-purple-50 flex h-9 w-9 cursor-default items-center justify-center rounded-full outline-none ring-offset-2 outside-month:text-gray-300 hover:bg-gray-200 focus-visible:ring pressed:bg-gray-200 selected:bg-black selected:text-white"
+                    className="ring-black-600/70 flex h-9 w-9 cursor-default items-center justify-center rounded-full outline-none ring-offset-2 outside-month:text-gray-300 hover:bg-gray-200 focus-visible:ring pressed:bg-gray-200 selected:bg-black selected:bg-pwhl-purple-50 selected:text-white"
                   />
                 )}
               </CalendarGridBody>
