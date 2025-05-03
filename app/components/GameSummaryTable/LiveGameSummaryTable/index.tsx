@@ -1,6 +1,7 @@
 import { TableCell } from "~/components/Table/TableCell";
 import { TeamNameTableCell } from "~/components/Table/TeamNameTableCell";
 import type { GameStats, LiveGame } from "~/components/types";
+import { useLiveGameStats } from "./hooks/useLiveGameStats";
 
 type LiveGameSummaryTableProps = {
   readonly game: LiveGame;
@@ -11,7 +12,9 @@ export const LiveGameSummaryTable = ({
   game,
   gameStats,
 }: LiveGameSummaryTableProps) => {
-  const { periods } = gameStats;
+  const liveGameStats = useLiveGameStats({ game, gameStats });
+  const { periods, visitingTeam, homeTeam, visitingScore, homeScore } =
+    liveGameStats;
   const firstPeriod = periods[0];
   const secondPeriod = periods[1];
   const thirdPeriod = periods[2];
@@ -30,23 +33,20 @@ export const LiveGameSummaryTable = ({
       <tbody>
         <tr className="text-black">
           <TeamNameTableCell
-            shotsOnGoal={gameStats.visitingTeam.sog}
+            shotsOnGoal={visitingTeam.sog}
             team={game.visitingTeam}
           />
           <TableCell>{firstPeriod.visitorGoals}</TableCell>
           <TableCell>{secondPeriod?.visitorGoals ?? "-"}</TableCell>
           <TableCell>{thirdPeriod?.visitorGoals ?? "-"}</TableCell>
-          <TableCell>{game.visitingScore}</TableCell>
+          <TableCell>{visitingScore}</TableCell>
         </tr>
         <tr className="text-black">
-          <TeamNameTableCell
-            team={game.homeTeam}
-            shotsOnGoal={gameStats.homeTeam.sog}
-          />
+          <TeamNameTableCell team={game.homeTeam} shotsOnGoal={homeTeam.sog} />
           <TableCell>{firstPeriod.homeGoals}</TableCell>
           <TableCell>{secondPeriod?.homeGoals ?? "-"}</TableCell>
           <TableCell>{thirdPeriod?.homeGoals ?? "-"}</TableCell>
-          <TableCell>{game.homeScore}</TableCell>
+          <TableCell>{homeScore}</TableCell>
         </tr>
       </tbody>
     </table>

@@ -1,5 +1,5 @@
-const { initializeApp } = require("firebase/app");
-const {
+import { initializeApp } from "firebase/app";
+import {
   getDatabase,
   ref,
   child,
@@ -9,7 +9,7 @@ const {
   onChildAdded,
   onChildChanged,
   onValue,
-} = require("firebase/database");
+} from "firebase/database";
 
 const firebaseUrl = "leaguestat-b9523.firebaseio.com";
 const firebaseToken = "uwM69pPkdUhb0UuVAxM8IcA6pBAzATAxOc8979oJ";
@@ -32,28 +32,10 @@ const firebaseConfig = {
 // console.log("subscribing to", { subscribeDate });
 
 const app = initializeApp(firebaseConfig);
-
-// console.log(app);
 const db = getDatabase(app);
 const dbRef = ref(db);
 
-// const fbPubClockRef = child(dbRef, "/svf/ahl/publishedclock/1/games/");
-// const fbRunningClocksRef = child(dbRef, "/svf/ahl/runningclock/games/");
-// const fbGoalSummary = child(dbRef, "/svf/ahl/goalssummary/1/games/");
-
-// const fbPubClockUpdate = (snapshot) => {
-//   console.log("got snapshot update", snapshot.toJSON());
-// };
-
-// onValue(
-//   query(fbGoalSummary, equalTo(subscribeDate), orderByChild("DatePlayed")),
-//   (snapshot) => {
-//     // console.log('got goal summary value', snapshot.toJSON());
-//     // console.log(
-//     //   Object.entries(snapshot.val()).flatMap(([k, v]) => v.PeriodsInfo)
-//     // );
-//   }
-// );
+const gameId = "106";
 
 /*
 
@@ -130,23 +112,47 @@ const logSnapshot = (snapshot) => {
   console.log(snapshot.toJSON());
 };
 
-// onValue(query(child(dbRef, "/svf/pwhl/runningclock/games/16")), (snapshot) => {
-//   console.log("[runningclock]", snapshot.toJSON());
-// });
 onValue(
-  query(child(dbRef, "/svf/pwhl/publishedclock/1/games/16")),
+  query(child(dbRef, `/svf/pwhl/runningclock/games/${gameId}`)),
+  (snapshot) => {
+    console.log("[runningclock]", snapshot.toJSON());
+  }
+);
+
+onValue(
+  query(child(dbRef, `/svf/pwhl/publishedclock/1/games/${gameId}`)),
   (snapshot) => {
     console.log("[publishedclock]", snapshot.toJSON());
   }
 );
-// onValue(query(child(dbRef, "/svf/pwhl/goals/1/games/16")), logSnapshot);
-// onValue(query(child(dbRef, "/svf/pwhl/goalssummary/1/games/16")), logSnapshot);
-// onValue(
-//   query(child(dbRef, "/svf/pwhl/penaltiessummary/1/games/16")),
-//   (snapshot) => {
-//     console.log("[penaltiessummary]", snapshot.toJSON());
-//   }
-// );
+
+onValue(
+  query(child(dbRef, `/svf/pwhl/goals/1/games/${gameId}`)),
+  (snapshot) => {
+    console.log("[goals]", snapshot.toJSON());
+  }
+);
+
+onValue(
+  query(child(dbRef, `/svf/pwhl/goalssummary/1/games/${gameId}`)),
+  (snapshot) => {
+    console.log("[goalssummary]", snapshot.toJSON());
+  }
+);
+
+onValue(
+  query(child(dbRef, `/svf/pwhl/shotssummary/1/games/${gameId}`)),
+  (snapshot) => {
+    console.log("[shotssummary]", snapshot.toJSON());
+  }
+);
+
+onValue(
+  query(child(dbRef, `/svf/pwhl/penaltiessummary/1/games/${gameId}`)),
+  (snapshot) => {
+    console.log("[penaltiessummary]", snapshot.toJSON());
+  }
+);
 
 // game penalty summary
 // "/svf/" + clientCode + "/penaltiessummary/" + langId + "/games/" + gameId)

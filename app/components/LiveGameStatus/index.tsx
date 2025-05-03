@@ -1,4 +1,7 @@
+import { ClockStatusIcon } from "../ClockStatusIcon";
+import { PeriodOrdinal } from "../PeriodOrdinal";
 import type { GameClock } from "../types";
+import { useGameClock } from "./hooks/useGameClock";
 
 const LiveIndicator = () => (
   <span className="mx-auto block pt-2 text-xs tracking-widest">
@@ -7,53 +10,42 @@ const LiveIndicator = () => (
   </span>
 );
 
-// TODO: i18n
-const pr = new Intl.PluralRules("en-US", { type: "ordinal" });
-const suffixes = new Map([
-  ["one", "st"],
-  ["two", "nd"],
-  ["few", "rd"],
-  ["other", "th"],
-]);
-const formatOrdinals = (n: number) => {
-  const rule = pr.select(n);
-  const suffix = suffixes.get(rule);
-  return `${n}${suffix}`;
-};
-
 type LiveGameStatusProps = {
   readonly gameClock: GameClock;
+  readonly gameId: number;
   readonly isPlayoffGame: boolean;
 };
 
 export const LiveGameStatus = ({
   gameClock,
+  gameId,
   isPlayoffGame,
 }: LiveGameStatusProps) => {
-  const { clockTime, isInIntermission, period } = gameClock;
+  const { currentPeriod, isIntermission, isRunning, timeRemaining } =
+    useGameClock({ fallback: gameClock, gameId });
 
-  if (isInIntermission) {
+  if (currentPeriod < 4) {
     return (
       <>
-        {formatOrdinals(period)} - END
+        <span className="flex flex-row gap-1">
+          <span>
+            <PeriodOrdinal period={currentPeriod} />
+          </span>
+          {isIntermission ? "END" : timeRemaining}
+        </span>
+        <ClockStatusIcon
+          isIntermission={isIntermission}
+          isWhistle={!isRunning}
+        />
         <LiveIndicator />
       </>
     );
   }
 
-  if (period < 4) {
+  if (currentPeriod === 4) {
     return (
       <>
-        {formatOrdinals(period)} - {clockTime}
-        <LiveIndicator />
-      </>
-    );
-  }
-
-  if (period === 4) {
-    return (
-      <>
-        OT - {clockTime}
+        OT - {timeRemaining}
         <LiveIndicator />
       </>
     );
@@ -62,17 +54,17 @@ export const LiveGameStatus = ({
   if (!isPlayoffGame) {
     return (
       <>
-        SO - {clockTime}
+        SO - {timeRemaining}
         <LiveIndicator />
       </>
     );
   }
 
-  const otPeriods = period - 3;
+  const otPeriods = currentPeriod - 3;
 
   return (
     <>
-      {otPeriods}OT - {clockTime}
+      {otPeriods}OT - {timeRemaining}
       <LiveIndicator />
     </>
   );
