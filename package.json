@@ -30,8 +30,8 @@
   "dependencies": {
     "@heroicons/react": "^2.1.5",
     "@internationalized/date": "^3.5.6",
-    "@remix-run/node": "^2.14.0",
-    "@remix-run/react": "^2.14.0",
+    "@remix-run/node": "^2.16.5",
+    "@remix-run/react": "^2.16.5",
     "@vercel/analytics": "^1.0.2",
     "cross-fetch": "^3.1.5",
     "date-fns": "^2.29.3",
@@ -44,7 +44,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.14.0",
-    "@remix-run/dev": "^2.14.0",
+    "@remix-run/dev": "^2.16.5",
     "@svgr/cli": "^8.1.0",
     "@svgr/plugin-jsx": "^8.1.0",
     "@svgr/plugin-prettier": "^8.1.0",
@@ -76,10 +76,5 @@
   },
   "engines": {
     "node": ">= 18"
-  },
-  "overrides": {
-    "@remix-run/server-runtime": {
-      "cookie": "^0.7.2"
-    }
   }
 }
