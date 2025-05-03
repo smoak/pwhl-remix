@@ -34,7 +34,6 @@ export const FinalGameStatus = ({
   gameType,
   endedInPeriod,
 }: FinalGameStatusProps) => {
-  console.log('FinalGameStatus', { gameType, endedInPeriod });
   const endedInShootout = gameType === "RegularSeason" && endedInPeriod === 5;
   const endedInOvertime = endedInPeriod > 3 && !endedInShootout;
 
