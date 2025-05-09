@@ -18,6 +18,7 @@
     "lint": "run-s 'lint:*'",
     "lint:es": "eslint app --max-warnings=0",
     "lint:style": "prettier 'app/**/*.(ts|tsx)' --check",
+    "lint:style:fix": "prettier 'app/**/*.(ts|tsx)' --write",
     "serve": "remix-serve ./build/server/index.js",
     "start": "run-s -n dev serve",
     "test": "TZ=UTC vitest run --coverage",

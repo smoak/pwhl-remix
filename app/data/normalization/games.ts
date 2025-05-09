@@ -116,5 +116,10 @@ type NormalizeGames = (
 ) => Game[];
 export const normalizeGames: NormalizeGames = (apiGames, bootstrapResponse) =>
   apiGames
-    .filter((game) => game.VisitorCode !== "TBD" && game.HomeCode !== "TBD" && game.GameDateISO8601 !== "")
+    .filter(
+      (game) =>
+        game.VisitorCode !== "TBD" &&
+        game.HomeCode !== "TBD" &&
+        game.GameDateISO8601 !== ""
+    )
     .map((game) => normalizeGame(game, bootstrapResponse));
