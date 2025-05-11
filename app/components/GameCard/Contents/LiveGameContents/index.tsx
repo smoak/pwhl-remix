@@ -18,7 +18,7 @@ export const LiveGameContents = ({ game }: LiveGameContentsProps) => {
       <div className="mt-3 flex flex-1">
         <Score score={game.homeScore} />
         <p className="flex-1 whitespace-nowrap px-3 pt-1.5 text-center uppercase">
-          <LiveGameStatus gameClock={game.gameClock} isPlayoffGame={false} />
+          <LiveGameStatus gameClock={game.gameClock} isPlayoffGame={game.type === "Playoff"} />
         </p>
         <Score score={game.visitingScore} />
       </div>
